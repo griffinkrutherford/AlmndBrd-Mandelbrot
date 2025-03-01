@@ -1,4 +1,4 @@
-#include "../Code Structure (C++)/Base Class/Properties/Complex Number Handling (z, c).h"
+#include "Complex Number Handling (z, c).h"
 #include <cmath>
 
 Complex::Complex(double r, double i) : real(r), imag(i) {}

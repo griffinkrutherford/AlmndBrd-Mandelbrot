@@ -1,4 +1,8 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o"
+  "CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o.d"
+  "CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o"
+  "CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o.d"
   "CMakeFiles/mandelbrot_app.dir/main.cpp.o"
   "CMakeFiles/mandelbrot_app.dir/main.cpp.o.d"
   "mandelbrot_app"

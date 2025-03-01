@@ -65,26 +65,6 @@ CMAKE_BINARY_DIR = /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target package
-package: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cpack --config ./CPackConfig.cmake
-.PHONY : package
-
-# Special rule for the target package
-package/fast: package
-.PHONY : package/fast
-
-# Special rule for the target package_source
-package_source:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool for source..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cpack --config ./CPackSourceConfig.cmake /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/CPackSourceConfig.cmake
-.PHONY : package_source
-
-# Special rule for the target package_source
-package_source/fast: package_source
-.PHONY : package_source/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -104,51 +84,6 @@ rebuild_cache:
 # Special rule for the target rebuild_cache
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-.PHONY : list_install_components/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -194,6 +129,54 @@ mandelbrot_app/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/build
 .PHONY : mandelbrot_app/fast
 
+Complex_stub.o: Complex_stub.cpp.o
+.PHONY : Complex_stub.o
+
+# target to build an object file
+Complex_stub.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o
+.PHONY : Complex_stub.cpp.o
+
+Complex_stub.i: Complex_stub.cpp.i
+.PHONY : Complex_stub.i
+
+# target to preprocess a source file
+Complex_stub.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.i
+.PHONY : Complex_stub.cpp.i
+
+Complex_stub.s: Complex_stub.cpp.s
+.PHONY : Complex_stub.s
+
+# target to generate assembly for a file
+Complex_stub.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.s
+.PHONY : Complex_stub.cpp.s
+
+ML_stub.o: ML_stub.cpp.o
+.PHONY : ML_stub.o
+
+# target to build an object file
+ML_stub.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o
+.PHONY : ML_stub.cpp.o
+
+ML_stub.i: ML_stub.cpp.i
+.PHONY : ML_stub.i
+
+# target to preprocess a source file
+ML_stub.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.i
+.PHONY : ML_stub.cpp.i
+
+ML_stub.s: ML_stub.cpp.s
+.PHONY : ML_stub.s
+
+# target to generate assembly for a file
+ML_stub.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.s
+.PHONY : ML_stub.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -225,14 +208,14 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... install"
-	@echo "... install/local"
-	@echo "... install/strip"
-	@echo "... list_install_components"
-	@echo "... package"
-	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... mandelbrot_app"
+	@echo "... Complex_stub.o"
+	@echo "... Complex_stub.i"
+	@echo "... Complex_stub.s"
+	@echo "... ML_stub.o"
+	@echo "... ML_stub.i"
+	@echo "... ML_stub.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

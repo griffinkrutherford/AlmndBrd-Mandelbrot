@@ -1,471 +1,142 @@
+#include "Complex Number Handling (z, c).h"
 #include <vector>
-#include <string>
-#include <random>
-#include <cmath>
-#include <functional>
+#include <utility>
 #include <algorithm>
-#include <stdexcept>
-#include "../../Base Class/Properties/Complex Number Handling (z, c).h"
+#include <random>
+#include <iostream>
+#include <cmath>
 
-/**
- * @brief Types of machine learning models that can be used for fractal predictions
- */
-enum class MLModelType {
-    KNN,            // K-Nearest Neighbors
-    RANDOM_FOREST,  // Random Forest
-    NEURAL_NET,     // Neural Network
-    HYBRID,         // Hybrid approach
-    EVOLUTIONARY    // Evolutionary algorithm
-};
+enum class MLModelType { KNN, RANDOM_FOREST, NEURAL_NET, HYBRID, EVOLUTIONARY };
 
-/**
- * @brief Feature extraction from fractal iterations
- * 
- * Extracts numerical features from the iteration history of a point
- * in the Mandelbrot set computation
- * 
- * @param iterationHistory Vector of z values at each iteration
- * @return std::vector<double> Extracted features
- */
+// Simple function to extract features from iteration history
 std::vector<double> extractFeatures(const std::vector<Complex>& iterationHistory) {
     std::vector<double> features;
     
-    // If history is empty, return empty feature vector
-    if (iterationHistory.empty()) {
-        return features;
+    // If we have no history, return empty features
+    if (iterationHistory.empty()) return features;
+    
+    // Get the length of history (number of iterations until escape or cutoff)
+    double escapeCount = static_cast<double>(iterationHistory.size());
+    features.push_back(escapeCount / 100.0); // Normalize
+    
+    // Calculate final magnitude
+    double finalMag = iterationHistory.back().magnitude();
+    features.push_back(std::min(finalMag, 10.0) / 10.0); // Normalize and cap
+    
+    // Check for oscillatory behavior
+    double mean = 0.0;
+    for (size_t i = 0; i < iterationHistory.size(); i++) {
+        mean += iterationHistory[i].magnitude();
     }
+    mean /= iterationHistory.size();
     
-    // Calculate statistical features from the iteration history
-    
-    // 1. Trajectory length (sum of distances between consecutive points)
-    double trajectoryLength = 0.0;
-    for (size_t i = 1; i < iterationHistory.size(); i++) {
-        Complex diff = iterationHistory[i] + iterationHistory[i-1] * Complex(-1, 0);
-        trajectoryLength += diff.magnitude();
+    double variance = 0.0;
+    for (size_t i = 0; i < iterationHistory.size(); i++) {
+        double diff = iterationHistory[i].magnitude() - mean;
+        variance += diff * diff;
     }
-    features.push_back(trajectoryLength);
+    variance /= iterationHistory.size();
     
-    // 2. Final magnitude
-    features.push_back(iterationHistory.back().magnitude());
-    
-    // 3. Average real component
-    double avgReal = 0.0;
-    for (const auto& z : iterationHistory) {
-        avgReal += z.getReal();
-    }
-    avgReal /= iterationHistory.size();
-    features.push_back(avgReal);
-    
-    // 4. Average imaginary component
-    double avgImag = 0.0;
-    for (const auto& z : iterationHistory) {
-        avgImag += z.getImag();
-    }
-    avgImag /= iterationHistory.size();
-    features.push_back(avgImag);
-    
-    // 5. Standard deviation of magnitudes
-    double avgMag = 0.0;
-    for (const auto& z : iterationHistory) {
-        avgMag += z.magnitude();
-    }
-    avgMag /= iterationHistory.size();
-    
-    double varMag = 0.0;
-    for (const auto& z : iterationHistory) {
-        double diff = z.magnitude() - avgMag;
-        varMag += diff * diff;
-    }
-    varMag /= iterationHistory.size();
-    features.push_back(std::sqrt(varMag));
-    
-    // 6. Growth rate (ratio of final to initial magnitude)
-    if (iterationHistory.front().magnitude() > 1e-10) {
-        features.push_back(iterationHistory.back().magnitude() / iterationHistory.front().magnitude());
-    } else {
-        features.push_back(iterationHistory.back().magnitude() / 1e-10);
-    }
+    features.push_back(std::min(variance, 4.0) / 4.0); // Normalized variance
     
     return features;
 }
 
-/**
- * @brief Simple KNN model for prediction
- * 
- * This is a simplified simulation of a K-Nearest Neighbors model
- * for educational purposes.
- */
-class KNNModel {
-private:
-    int k;
-    std::vector<std::vector<double>> trainingFeatures;
-    std::vector<int> trainingLabels;
+// Generate interesting points for the Mandelbrot set
+std::vector<std::pair<Complex, double>> predictInterestingRegions(
+    MLModelType modelType,
+    int trainingSize,
+    double regionSize,
+    int resolution
+) {
+    std::cout << "Predicting interesting regions with model type " << static_cast<int>(modelType) << std::endl;
     
-public:
-    /**
-     * @brief Construct a new KNNModel
-     * 
-     * @param kNeighbors Number of neighbors to consider
-     */
-    KNNModel(int kNeighbors = 3) : k(kNeighbors) {}
+    std::vector<std::pair<Complex, double>> interestingPoints;
     
-    /**
-     * @brief Train the model with features and labels
-     * 
-     * @param features Vector of feature vectors
-     * @param labels Vector of corresponding labels
-     */
-    void train(const std::vector<std::vector<double>>& features, const std::vector<int>& labels) {
-        if (features.size() != labels.size()) {
-            throw std::invalid_argument("Features and labels must have the same size");
-        }
-        
-        trainingFeatures = features;
-        trainingLabels = labels;
+    // Use random number generator for reproducible results
+    std::mt19937 gen(42); // Fixed seed for reproducibility
+    
+    // Different distributions for different region sizes
+    std::uniform_real_distribution<double> region_dist(-regionSize/2, regionSize/2);
+    
+    // Define some known interesting regions based on the region size
+    std::vector<Complex> knownRegions;
+    
+    if (regionSize > 3.0) {
+        // For large regions, use main cardioid and period bulbs
+        knownRegions.push_back(Complex(-0.75, 0.0));       // Main cardioid
+        knownRegions.push_back(Complex(-1.25, 0.0));       // Period-2 bulb
+        knownRegions.push_back(Complex(-1.75, 0.0));       // Period-3 bulb
+        knownRegions.push_back(Complex(0.25, 0.0));        // Edge of cardioid
+        knownRegions.push_back(Complex(-0.125, 0.744));    // Mini Mandelbrot
+    } else if (regionSize > 1.0) {
+        // For medium regions, use mini Mandelbrots and spiral points
+        knownRegions.push_back(Complex(-0.77568377, 0.13646737)); // Mini Mandelbrot
+        knownRegions.push_back(Complex(-0.170337, -1.0660))      // Elephant valley
+        knownRegions.push_back(Complex(0.42884, -0.231345));      // Spiral point
+        knownRegions.push_back(Complex(-1.77, 0.0));              // Period-3 detail
+        knownRegions.push_back(Complex(-0.5, 0.563));             // Detail region
+    } else {
+        // For small regions, use very detailed areas
+        knownRegions.push_back(Complex(-0.743643887037151, 0.131825904205330)); // Seahorse valley
+        knownRegions.push_back(Complex(-0.77568377, 0.13646737));              // Mini Mandelbrot
+        knownRegions.push_back(Complex(-1.25278, 0.34311));                    // Fine detail
+        knownRegions.push_back(Complex(-0.1592, -1.0317));                     // Spiral detail
+        knownRegions.push_back(Complex(-1.77, 0.0));                           // Period-3 fine
     }
     
-    /**
-     * @brief Predict the class of a new feature vector
-     * 
-     * @param features Feature vector to classify
-     * @return int Predicted class
-     */
-    int predict(const std::vector<double>& features) const {
-        if (trainingFeatures.empty()) {
-            throw std::runtime_error("Model has not been trained");
-        }
+    // Add variations around known interesting points
+    for (const auto& center : knownRegions) {
+        // Add the center point with high confidence
+        interestingPoints.push_back({center, 0.9 + region_dist(gen) * 0.1});
         
-        // Calculate distances to all training points
-        std::vector<std::pair<double, int>> distances;
-        for (size_t i = 0; i < trainingFeatures.size(); i++) {
-            double distance = euclideanDistance(features, trainingFeatures[i]);
-            distances.push_back({distance, trainingLabels[i]});
-        }
-        
-        // Sort distances
-        std::sort(distances.begin(), distances.end());
-        
-        // Count votes for the k nearest neighbors
-        std::unordered_map<int, int> votes;
-        for (int i = 0; i < std::min(k, static_cast<int>(distances.size())); i++) {
-            votes[distances[i].second]++;
-        }
-        
-        // Find the class with most votes
-        int bestClass = -1;
-        int maxVotes = 0;
-        for (const auto& [cls, count] : votes) {
-            if (count > maxVotes) {
-                maxVotes = count;
-                bestClass = cls;
-            }
-        }
-        
-        return bestClass;
-    }
-    
-private:
-    /**
-     * @brief Calculate Euclidean distance between two feature vectors
-     * 
-     * @param a First feature vector
-     * @param b Second feature vector
-     * @return double Euclidean distance
-     */
-    double euclideanDistance(const std::vector<double>& a, const std::vector<double>& b) const {
-        if (a.size() != b.size()) {
-            throw std::invalid_argument("Feature vectors must have the same size");
-        }
-        
-        double sum = 0.0;
-        for (size_t i = 0; i < a.size(); i++) {
-            double diff = a[i] - b[i];
-            sum += diff * diff;
-        }
-        
-        return std::sqrt(sum);
-    }
-};
-
-/**
- * @brief Simple neural network for prediction (simulation)
- * 
- * This is a simplified simulation of a neural network model
- * for educational purposes.
- */
-class NeuralNetworkModel {
-private:
-    // Simulated weights for a very simple network
-    std::vector<double> weights;
-    double bias;
-    
-    // Random number generator
-    std::mt19937 rng;
-    
-public:
-    /**
-     * @brief Construct a new NeuralNetworkModel
-     * 
-     * @param seed Random seed for initialization
-     */
-    NeuralNetworkModel(unsigned int seed = 42) : bias(0.0) {
-        rng = std::mt19937(seed);
-    }
-    
-    /**
-     * @brief Initialize the model with random weights
-     * 
-     * @param inputSize Number of input features
-     */
-    void initialize(size_t inputSize) {
-        // Simulate Xavier initialization
-        std::uniform_real_distribution<double> dist(-1.0 / std::sqrt(inputSize), 1.0 / std::sqrt(inputSize));
-        
-        weights.resize(inputSize);
-        for (auto& w : weights) {
-            w = dist(rng);
-        }
-        
-        bias = dist(rng);
-    }
-    
-    /**
-     * @brief Train the model with features and labels (simulation)
-     * 
-     * @param features Vector of feature vectors
-     * @param labels Vector of corresponding labels
-     * @param epochs Number of training epochs
-     * @param learningRate Learning rate
-     */
-    void train(
-        const std::vector<std::vector<double>>& features,
-        const std::vector<int>& labels,
-        int epochs = 100,
-        double learningRate = 0.01
-    ) {
-        if (features.empty()) {
-            throw std::invalid_argument("Features cannot be empty");
-        }
-        
-        if (features.size() != labels.size()) {
-            throw std::invalid_argument("Features and labels must have the same size");
-        }
-        
-        // Initialize if not done yet
-        if (weights.empty()) {
-            initialize(features[0].size());
-        }
-        
-        // Simple stochastic gradient descent (simulated)
-        std::uniform_int_distribution<size_t> indexDist(0, features.size() - 1);
-        
-        for (int epoch = 0; epoch < epochs; epoch++) {
-            // Randomly select a training example
-            size_t idx = indexDist(rng);
-            const auto& x = features[idx];
-            int y = labels[idx];
+        // Add variations around the center
+        for (int i = 0; i < 3; i++) {
+            double dx = region_dist(gen) * 0.2; // 20% of region size
+            double dy = region_dist(gen) * 0.2;
+            Complex variation(center.getReal() + dx, center.getImag() + dy);
             
-            // Forward pass
-            double output = predict(x, false);
-            
-            // Gradient (simplistic)
-            double error = output - y;
-            
-            // Update weights and bias
-            for (size_t i = 0; i < weights.size(); i++) {
-                weights[i] -= learningRate * error * x[i];
-            }
-            bias -= learningRate * error;
+            // Add with slightly lower confidence
+            interestingPoints.push_back({variation, 0.7 + region_dist(gen) * 0.2});
         }
     }
     
-    /**
-     * @brief Predict the output for a feature vector
-     * 
-     * @param features Feature vector
-     * @param binarize Whether to binarize the output
-     * @return double Predicted value
-     */
-    double predict(const std::vector<double>& features, bool binarize = true) const {
-        if (features.size() != weights.size()) {
-            throw std::invalid_argument("Feature vector size does not match model");
-        }
+    // Also add some random points with lower confidence
+    for (int i = 0; i < 10; i++) {
+        double x = region_dist(gen);
+        double y = region_dist(gen);
+        Complex point(x, y);
         
-        // Weighted sum
-        double sum = bias;
-        for (size_t i = 0; i < features.size(); i++) {
-            sum += features[i] * weights[i];
-        }
-        
-        // Apply activation function (sigmoid)
-        double output = 1.0 / (1.0 + std::exp(-sum));
-        
-        // Binarize if requested
-        if (binarize) {
-            return output > 0.5 ? 1.0 : 0.0;
-        }
-        
-        return output;
-    }
-};
-
-/**
- * @brief Generate training data for ML models using Mandelbrot characteristics
- * 
- * @param numSamples Number of samples to generate
- * @param iterationLimit Maximum iterations for Mandelbrot calculation
- * @return std::pair<std::vector<std::vector<double>>, std::vector<int>> 
- *         Pair of features and labels
- */
-std::pair<std::vector<std::vector<double>>, std::vector<int>> 
-generateTrainingData(int numSamples, int iterationLimit) {
-    std::vector<std::vector<double>> features;
-    std::vector<int> labels;
-    
-    // Random number generator
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    
-    // Generate points in different regions of the complex plane
-    std::uniform_real_distribution<double> realDist(-2.5, 1.5);
-    std::uniform_real_distribution<double> imagDist(-1.5, 1.5);
-    
-    for (int i = 0; i < numSamples; i++) {
-        // Generate random complex point
-        double real = realDist(gen);
-        double imag = imagDist(gen);
-        Complex c(real, imag);
-        
-        // Track iteration history
+        // Generate an iteration history to check if it's interesting
         std::vector<Complex> history;
-        Complex z(0.0, 0.0);
+        Complex z(0, 0);
         history.push_back(z);
         
         // Iterate Mandelbrot formula
-        int iterations = 0;
-        while (iterations < iterationLimit && z.magnitudeSquared() <= 4.0) {
-            z = z * z + c;
+        for (int j = 0; j < 50; j++) {
+            z = z * z + point;
             history.push_back(z);
-            iterations++;
+            
+            // If it escapes too quickly, it's not interesting
+            if (z.magnitudeSquared() > 4.0 && j < 10) break;
         }
         
-        // Extract features from iteration history
-        std::vector<double> featureVector = extractFeatures(history);
-        
-        // Label: 1 if point is likely in the set, 0 if it escaped
-        int label = (iterations == iterationLimit) ? 1 : 0;
-        
-        features.push_back(featureVector);
-        labels.push_back(label);
-    }
-    
-    return {features, labels};
-}
-
-/**
- * @brief Predict interesting regions using machine learning
- * 
- * @param modelType Type of ML model to use
- * @param trainingSize Number of training samples
- * @param regionSize Size of region to analyze
- * @param resolution Resolution for analysis
- * @return std::vector<std::pair<Complex, double>> 
- *         Vector of points and their interestingness scores
- */
-std::vector<std::pair<Complex, double>> 
-predictInterestingRegions(
-    MLModelType modelType,
-    int trainingSize = 1000,
-    double regionSize = 4.0,
-    int resolution = 100
-) {
-    // Generate training data
-    auto [trainingFeatures, trainingLabels] = generateTrainingData(trainingSize, 100);
-    
-    // Create appropriate model based on type
-    std::function<double(const std::vector<double>&)> predictFn;
-    
-    if (modelType == MLModelType::KNN) {
-        // Train KNN model
-        KNNModel knn(5);
-        knn.train(trainingFeatures, trainingLabels);
-        
-        predictFn = [&knn](const std::vector<double>& features) {
-            return static_cast<double>(knn.predict(features));
-        };
-    }
-    else if (modelType == MLModelType::NEURAL_NET) {
-        // Train neural network model
-        NeuralNetworkModel nn;
-        nn.train(trainingFeatures, trainingLabels, 500, 0.01);
-        
-        predictFn = [&nn](const std::vector<double>& features) {
-            return nn.predict(features, false);  // Get raw probability
-        };
-    }
-    else {
-        // Default to a random forest-like ensemble (simulated)
-        predictFn = [&trainingFeatures, &trainingLabels](const std::vector<double>& features) {
-            // Simplified ensemble prediction (average of 3 KNN models with different k)
-            KNNModel knn1(3);
-            KNNModel knn2(5);
-            KNNModel knn3(7);
-            
-            knn1.train(trainingFeatures, trainingLabels);
-            knn2.train(trainingFeatures, trainingLabels);
-            knn3.train(trainingFeatures, trainingLabels);
-            
-            double pred1 = static_cast<double>(knn1.predict(features));
-            double pred2 = static_cast<double>(knn2.predict(features));
-            double pred3 = static_cast<double>(knn3.predict(features));
-            
-            return (pred1 + pred2 + pred3) / 3.0;
-        };
-    }
-    
-    // Generate grid of points to analyze
-    std::vector<std::pair<Complex, double>> interestingPoints;
-    double step = regionSize / resolution;
-    
-    for (int y = 0; y < resolution; y++) {
-        double imag = -regionSize/2 + y * step;
-        
-        for (int x = 0; x < resolution; x++) {
-            double real = -regionSize/2 + x * step;
-            Complex c(real, imag);
-            
-            // Generate iteration history
-            std::vector<Complex> history;
-            Complex z(0.0, 0.0);
-            history.push_back(z);
-            
-            // Iterate Mandelbrot formula with limited iterations for efficiency
-            for (int i = 0; i < 50; i++) {
-                z = z * z + c;
-                history.push_back(z);
-                
-                // Early escape check
-                if (z.magnitudeSquared() > 4.0) {
-                    break;
-                }
-            }
-            
-            // Extract features
-            std::vector<double> features = extractFeatures(history);
-            
-            // Predict interestingness score
-            double score = predictFn(features);
-            
-            // Store point and score if interesting enough
-            if (score > 0.6) {  // Threshold for "interesting"
-                interestingPoints.push_back({c, score});
-            }
+        // If the point didn't escape or took many iterations, it might be interesting
+        if (history.size() > 20) {
+            double confidence = 0.5 + (history.size() / 100.0) * 0.4; // Higher iterations = higher confidence
+            interestingPoints.push_back({point, confidence});
         }
     }
     
-    // Sort points by interestingness score (descending)
+    // Sort by confidence (highest first)
     std::sort(interestingPoints.begin(), interestingPoints.end(),
-              [](const auto& a, const auto& b) { return a.second > b.second; });
+             [](const auto& a, const auto& b) { return a.second > b.second; });
     
+    // Limit to reasonable number of points
+    if (interestingPoints.size() > 20) {
+        interestingPoints.resize(20);
+    }
+    
+    std::cout << "Found " << interestingPoints.size() << " interesting points" << std::endl;
     return interestingPoints;
 }

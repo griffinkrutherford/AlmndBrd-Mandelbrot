@@ -83,17 +83,49 @@ CMakeFiles/mandelbrot_app.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mandelbrot_app.dir/main.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/main.cpp -o CMakeFiles/mandelbrot_app.dir/main.cpp.s
 
+CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o: CMakeFiles/mandelbrot_app.dir/flags.make
+CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o: Complex_stub.cpp
+CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o: CMakeFiles/mandelbrot_app.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o -MF CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o.d -o CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o -c /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/Complex_stub.cpp
+
+CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/Complex_stub.cpp > CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.i
+
+CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/Complex_stub.cpp -o CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.s
+
+CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o: CMakeFiles/mandelbrot_app.dir/flags.make
+CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o: ML_stub.cpp
+CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o: CMakeFiles/mandelbrot_app.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o -MF CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o.d -o CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o -c /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/ML_stub.cpp
+
+CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/ML_stub.cpp > CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.i
+
+CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/ML_stub.cpp -o CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.s
+
 # Object files for target mandelbrot_app
 mandelbrot_app_OBJECTS = \
-"CMakeFiles/mandelbrot_app.dir/main.cpp.o"
+"CMakeFiles/mandelbrot_app.dir/main.cpp.o" \
+"CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o" \
+"CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o"
 
 # External object files for target mandelbrot_app
 mandelbrot_app_EXTERNAL_OBJECTS =
 
 mandelbrot_app: CMakeFiles/mandelbrot_app.dir/main.cpp.o
+mandelbrot_app: CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o
+mandelbrot_app: CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o
 mandelbrot_app: CMakeFiles/mandelbrot_app.dir/build.make
 mandelbrot_app: CMakeFiles/mandelbrot_app.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable mandelbrot_app"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/griffinrutherford/Documents/AlmndBrd-Mandelbrot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable mandelbrot_app"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mandelbrot_app.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
