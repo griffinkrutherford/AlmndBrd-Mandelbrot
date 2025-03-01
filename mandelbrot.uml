@@ -1,60 +1,77 @@
 @startuml
 skinparam monochrome true
 
+' ---------------------------
+' Core Classes
+' ---------------------------
 class Complex {
-  -real: double
-  -imag: double
-  +Complex(r: double, i: double)
-  +operator+(other: Complex): Complex
-  +operator*(other: Complex): Complex
-  +magnitude(): double
+  - real: double
+  - imag: double
+  + Complex(r: double, i: double)
+  + operator+(other: Complex): Complex
+  + operator*(other: Complex): Complex
+  + magnitude(): double
 }
 
 class MandelbrotBase {
-  -Complex c
-  -Complex z
-  -int maxIterations
-  -double threshold
-  -int currentIteration
-  +MandelbrotBase(real: double, imag: double, maxIter: int, thresh: double)
-  +iterateEquation()
-  +checkDivergence(): bool
-  +getIterations(): int
-  +getZ(): Complex
+  - c: Complex
+  - z: Complex
+  - maxIterations: int
+  - threshold: double
+  - currentIteration: int
+  + MandelbrotBase(real: double, imag: double, maxIter: int, thresh: double)
+  + iterateEquation()
+  + checkDivergence(): bool
+  + getIterations(): int
+  + getZ(): Complex
 }
 MandelbrotBase o--> "2" Complex : contains
 
 class Visualization {
-  -int resolutionX
-  -int resolutionY
-  -string colorLogic
-  +Visualization(real: double, imag: double, resX: int, resY: int)
-  +setResolution(x: int, y: int)
-  +setColorLogic(logic: string)
-  +renderOutput(): void
+  - resolutionX: int
+  - resolutionY: int
+  - colorLogic: string
+  + Visualization(real: double, imag: double, resX: int, resY: int)
+  + setResolution(x: int, y: int)
+  + setColorLogic(logic: string)
+  + renderOutput(): void
 }
 MandelbrotBase <|-- Visualization
 
 class GenAI {
-  -string mlModel
-  -string patternLogic
-  +GenAI(real: double, imag: double, model: string)
-  +setMLModel(model: string)
-  +setPatternLogic(logic: string)
-  +integrateWithFractal(): void
+  - mlModel: string
+  - patternLogic: string
+  + GenAI(real: double, imag: double, model: string)
+  + setMLModel(model: string)
+  + setPatternLogic(logic: string)
+  + integrateWithFractal(): void
 }
 MandelbrotBase <|-- GenAI
 
+class Viewport {
+  - x_min: double
+  - x_max: double
+  - y_min: double
+  - y_max: double
+  + zoom(factor: double): void
+  + pan(dx: double, dy: double): void
+  + zoomToRect(x1: int, y1: int, x2: int, y2: int): void
+  + getZoomLevel(): double
+}
+
 note right of Visualization
   Uses resolution settings and
-  color assignment logic to render
+  color assignment logic to render.
 end note
 
 note right of GenAI
   Integrates ML predictions with
-  fractal computation
+  fractal computation.
 end note
 
+' ---------------------------
+' Utilities Package
+' ---------------------------
 package "Utilities" {
   class ComplexNumberOperations
   class FileIO
@@ -63,5 +80,24 @@ Visualization --> ComplexNumberOperations : uses
 Visualization --> FileIO : uses
 GenAI --> ComplexNumberOperations : uses
 GenAI --> FileIO : uses
+
+' ---------------------------
+' Platform-Specific Applications
+' ---------------------------
+package "Platform" {
+  class MandelbrotAppMacOS {
+    + run(): void
+  }
+  class MandelbrotAppWeb {
+    + run(): void
+  }
+}
+MandelbrotAppMacOS ..> Visualization : uses
+MandelbrotAppMacOS ..> GenAI : uses
+MandelbrotAppMacOS ..> Viewport : manages
+
+MandelbrotAppWeb ..> Visualization : uses
+MandelbrotAppWeb ..> GenAI : uses
+MandelbrotAppWeb ..> Viewport : manages
 
 @enduml

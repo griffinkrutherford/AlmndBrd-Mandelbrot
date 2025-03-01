@@ -87,4 +87,4 @@ Additional Notes
   - For the macOS build, full multithreading and advanced features (like GenAI integration) are enabled.
   - The web version is simplified by default. Future work can include enabling threading (via Web Workers) or ML predictions if needed.
 
-For questions or further assistance, please refer to the project documentation or contact the project maintainer.
+For questions or further assistance, please refer to the project documentation or contact me at grutherford.mines.edu.
