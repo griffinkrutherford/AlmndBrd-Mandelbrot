@@ -110,5 +110,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/mandelbrot_app.dir/DependInfo.cmake"
+  "CMakeFiles/mandelbrot_app_macos.dir/DependInfo.cmake"
   )

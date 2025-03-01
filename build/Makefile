@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named mandelbrot_app
+# Target rules for targets named mandelbrot_app_macos
 
 # Build rule for target.
-mandelbrot_app: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mandelbrot_app
-.PHONY : mandelbrot_app
+mandelbrot_app_macos: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mandelbrot_app_macos
+.PHONY : mandelbrot_app_macos
 
 # fast build rule for target.
-mandelbrot_app/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/build
-.PHONY : mandelbrot_app/fast
+mandelbrot_app_macos/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/build
+.PHONY : mandelbrot_app_macos/fast
 
 Complex_stub.o: Complex_stub.cpp.o
 .PHONY : Complex_stub.o
 
 # target to build an object file
 Complex_stub.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/Complex_stub.cpp.o
 .PHONY : Complex_stub.cpp.o
 
 Complex_stub.i: Complex_stub.cpp.i
@@ -142,7 +142,7 @@ Complex_stub.i: Complex_stub.cpp.i
 
 # target to preprocess a source file
 Complex_stub.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/Complex_stub.cpp.i
 .PHONY : Complex_stub.cpp.i
 
 Complex_stub.s: Complex_stub.cpp.s
@@ -150,7 +150,7 @@ Complex_stub.s: Complex_stub.cpp.s
 
 # target to generate assembly for a file
 Complex_stub.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/Complex_stub.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/Complex_stub.cpp.s
 .PHONY : Complex_stub.cpp.s
 
 ML_stub.o: ML_stub.cpp.o
@@ -158,7 +158,7 @@ ML_stub.o: ML_stub.cpp.o
 
 # target to build an object file
 ML_stub.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/ML_stub.cpp.o
 .PHONY : ML_stub.cpp.o
 
 ML_stub.i: ML_stub.cpp.i
@@ -166,7 +166,7 @@ ML_stub.i: ML_stub.cpp.i
 
 # target to preprocess a source file
 ML_stub.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/ML_stub.cpp.i
 .PHONY : ML_stub.cpp.i
 
 ML_stub.s: ML_stub.cpp.s
@@ -174,32 +174,32 @@ ML_stub.s: ML_stub.cpp.s
 
 # target to generate assembly for a file
 ML_stub.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/ML_stub.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/ML_stub.cpp.s
 .PHONY : ML_stub.cpp.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+main_macos.o: main_macos.cpp.o
+.PHONY : main_macos.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/main.cpp.o
-.PHONY : main.cpp.o
+main_macos.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/main_macos.cpp.o
+.PHONY : main_macos.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+main_macos.i: main_macos.cpp.i
+.PHONY : main_macos.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/main.cpp.i
-.PHONY : main.cpp.i
+main_macos.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/main_macos.cpp.i
+.PHONY : main_macos.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+main_macos.s: main_macos.cpp.s
+.PHONY : main_macos.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app.dir/build.make CMakeFiles/mandelbrot_app.dir/main.cpp.s
-.PHONY : main.cpp.s
+main_macos.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mandelbrot_app_macos.dir/build.make CMakeFiles/mandelbrot_app_macos.dir/main_macos.cpp.s
+.PHONY : main_macos.cpp.s
 
 # Help Target
 help:
@@ -209,16 +209,16 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... mandelbrot_app"
+	@echo "... mandelbrot_app_macos"
 	@echo "... Complex_stub.o"
 	@echo "... Complex_stub.i"
 	@echo "... Complex_stub.s"
 	@echo "... ML_stub.o"
 	@echo "... ML_stub.i"
 	@echo "... ML_stub.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... main_macos.o"
+	@echo "... main_macos.i"
+	@echo "... main_macos.s"
 .PHONY : help
 
 

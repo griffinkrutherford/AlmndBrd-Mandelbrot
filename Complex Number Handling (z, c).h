@@ -13,7 +13,7 @@ public:
     double getReal() const;
     double getImag() const;
     
-    // Mutators (setters)
+    // Mutators
     void setReal(double r);
     void setImag(double i);
     
