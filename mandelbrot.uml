@@ -1,0 +1,67 @@
+@startuml
+skinparam monochrome true
+
+class Complex {
+  -real: double
+  -imag: double
+  +Complex(r: double, i: double)
+  +operator+(other: Complex): Complex
+  +operator*(other: Complex): Complex
+  +magnitude(): double
+}
+
+class MandelbrotBase {
+  -Complex c
+  -Complex z
+  -int maxIterations
+  -double threshold
+  -int currentIteration
+  +MandelbrotBase(real: double, imag: double, maxIter: int, thresh: double)
+  +iterateEquation()
+  +checkDivergence(): bool
+  +getIterations(): int
+  +getZ(): Complex
+}
+MandelbrotBase o--> "2" Complex : contains
+
+class Visualization {
+  -int resolutionX
+  -int resolutionY
+  -string colorLogic
+  +Visualization(real: double, imag: double, resX: int, resY: int)
+  +setResolution(x: int, y: int)
+  +setColorLogic(logic: string)
+  +renderOutput(): void
+}
+MandelbrotBase <|-- Visualization
+
+class GenAI {
+  -string mlModel
+  -string patternLogic
+  +GenAI(real: double, imag: double, model: string)
+  +setMLModel(model: string)
+  +setPatternLogic(logic: string)
+  +integrateWithFractal(): void
+}
+MandelbrotBase <|-- GenAI
+
+note right of Visualization
+  Uses resolution settings and
+  color assignment logic to render
+end note
+
+note right of GenAI
+  Integrates ML predictions with
+  fractal computation
+end note
+
+package "Utilities" {
+  class ComplexNumberOperations
+  class FileIO
+}
+Visualization --> ComplexNumberOperations : uses
+Visualization --> FileIO : uses
+GenAI --> ComplexNumberOperations : uses
+GenAI --> FileIO : uses
+
+@enduml
